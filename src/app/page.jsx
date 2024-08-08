@@ -1,53 +1,45 @@
-'use client'
-import React, { useState } from 'react';
+import Link from "next/link";
+import React from "react";
 
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const mealTypes = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner'];
-
-export default function MealPlanner() {
-  const [weekOf, setWeekOf] = useState('');
-
+const Home = () => {
   return (
-    <div className="max-w-4xl mx-auto p-4 font-sans">
-      <div className="border-4 border-purple-200 rounded-lg p-6">
-        <h1 className="text-4xl font-bold text-center mb-4">7-Day Meal Planner</h1>
-        <div className="mb-4">
-          <label htmlFor="weekOf" className="font-semibold">For the week of: </label>
-          <input
-            type="text"
-            id="weekOf"
-            value={weekOf}
-            onChange={(e) => setWeekOf(e.target.value)}
-            className="border-b border-gray-400 focus:outline-none focus:border-purple-500"
-          />
+    <div>
+      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <div className="container px-4 md:px-6">
+          <div className="flex align-middle justify-center">
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="space-y-2 flex flex-col align-middle justify-center">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  Effortless Meal Planning for a Healthier You
+                </h1>
+                <div className="flex justify-center align-middle">
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                    Take the guesswork out of meal planning with our powerful
+                    app. Create personalized meal plans, generate grocery lists,
+                    and access a vast database of delicious recipes.
+                  </p>
+                </div>
+              </div>
+              <div className="flex justify-center align-middle flex-col gap-2 min-[400px]:flex-row">
+                <Link href={"/mealplanner"}>
+                  <button className="inline-flex border h-10 items-center justify-center rounded-md border-input px-8 bg-green-300 text-sm font-medium shadow-sm transition-colors hover:bg-green-400 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+                    Start Planning
+                  </button>
+                </Link>
+                <Link
+                  href="#"
+                  className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                  prefetch={false}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="w-1/6"></th>
-              {mealTypes.map((type, index) => (
-                <th key={index} className="w-1/6 py-2 px-1 text-purple-600 font-normal italic">
-                  {type}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {days.map((day, index) => (
-              <tr key={index}>
-                <td className={`py-2 px-1 ${index % 2 === 0 ? 'bg-purple-400' : 'bg-purple-300'} text-white font-semibold`}>
-                  <div className="transform -skew-x-12">{day}</div>
-                </td>
-                {mealTypes.map((_, mealIndex) => (
-                  <td key={mealIndex} className="border border-purple-200 h-12">
-                    <input type="text" className="w-full h-full px-1 focus:outline-none focus:bg-purple-50" />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      </section>
     </div>
   );
-}
+};
+
+export default Home;
