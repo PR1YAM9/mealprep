@@ -1,46 +1,38 @@
-'use server'
-
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { createClient } from '../../../utils/supabase/server'
-
 export async function login(formData) {
   const supabase = createClient()
-
-  const data = {
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: formData.get('email'),
     password: formData.get('password'),
-  }
-
-  const { error } = await supabase.auth.signInWithPassword(data)
+  })
 
   if (error) {
+    console.error('Login error:', error.message)
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
+  console.log('Login success:', data)
+  revalidatePath('/')
   redirect('/')
 }
 
 export async function signup(formData) {
   const supabase = createClient()
-   
-  const data = {
+  const { data, error } = await supabase.auth.signUp({
     email: formData.get('email'),
     password: formData.get('password'),
     options: {
       data: {
         username: formData.get('username'),
-      }
-    }
-  }
-
-  const { error } = await supabase.auth.signUp(data)
+      },
+    },
+  })
 
   if (error) {
+    console.error('Signup error:', error.message)
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
+  console.log('Signup success:', data)
+  revalidatePath('/')
   redirect('/')
 }

@@ -1,16 +1,24 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { login, signup } from './actions'
 
 export default function LoginPage() {
   const [error, setError] = useState(null)
+  const router = useRouter()
 
-  const handleSubmit = async (action, formData) => {
-    const result = await action(formData)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const action = e.nativeEvent.submitter.value
+    const result = await (action === 'login' ? login(formData) : signup(formData))
     if (result?.error) {
       setError(result.error)
+    } else if (result?.success) {
+      router.push('/')
     }
+    console.log('result', result)
   }
 
   return (
@@ -28,7 +36,7 @@ export default function LoginPage() {
               <span className="block sm:inline">{error}</span>
             </div>
           )}
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                 Username
@@ -79,7 +87,8 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                onClick={(e) => handleSubmit(login, new FormData(e.target.form))}
+                name="action"
+                value="login"
                 className="w-full inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Sign in
@@ -88,7 +97,8 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                onClick={(e) => handleSubmit(signup, new FormData(e.target.form))}
+                name="action"
+                value="signup"
                 className="w-full inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 Sign up
